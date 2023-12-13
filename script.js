@@ -4,7 +4,6 @@ const btn = document.querySelector(".btn");
 const bName = document.querySelector(".block-name");
 const seatEditing = document.querySelector(".activate-seat-editing-btn button");
 
-
 var canvas = new fabric.Canvas("canvas", {
   top: 50,
   left: 50,
@@ -16,6 +15,7 @@ let seatSize = 20;
 let seatNums = [];
 let grpArr = [];
 let group;
+let groupAdded = true;
 
 btn.addEventListener("click", () => {
   const rows = Rows.value;
@@ -24,12 +24,13 @@ btn.addEventListener("click", () => {
 
   canvas.clear();
   seatNums = [];
+  grpArr = [];
 
   const blockHeading = new fabric.Text(`${blockName}`, {
     left: 1.5 * seatSize,
     top: 0,
     fontSize: 25,
-    fill: "grey",
+    fill: "white",
     selectable: false,
   });
 
@@ -42,7 +43,7 @@ btn.addEventListener("click", () => {
       left: 0,
       top: i * seatSize * 2 + seatSize / 2.5 + 25,
       fontSize: 25,
-      fill: "grey",
+      fill: "white",
       selectable: false,
     });
 
@@ -71,6 +72,7 @@ btn.addEventListener("click", () => {
         fontSize: 15,
         selectable: false,
         seatNumber: i * cols + j + 1,
+        fill: 'white',
       });
 
       seat.on("mousedown", function () {
@@ -98,14 +100,21 @@ btn.addEventListener("click", () => {
 
   group = new fabric.Group(grpArr);
   canvas.add(group);
+  groupAdded = true;
 
   canvas.renderAll();
 });
 
 seatEditing.addEventListener("click", () => {
-  canvas.remove(group);
+  if (groupAdded) {
+    canvas.remove(group);
+    groupAdded = false;
+  } else {
+    canvas.add(group);
+    groupAdded = true;
+  }
   canvas.renderAll();
-})
+});
 
 function toggleSeatSelection(seat) {
   seat.set("fill", seat.get("fill") === "blue" ? "grey" : "blue");
