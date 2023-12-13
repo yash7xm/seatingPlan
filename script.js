@@ -3,6 +3,7 @@ const Cols = document.querySelector(".columns");
 const btn = document.querySelector(".btn");
 const bName = document.querySelector(".block-name");
 const seatEditing = document.querySelector(".activate-seat-editing-btn button");
+const clearSeatsBtn = document.querySelector(".clear-seats button");
 
 var canvas = new fabric.Canvas("canvas", {
   top: 50,
@@ -16,6 +17,7 @@ let seatNums = [];
 let grpArr = [];
 let group;
 let groupAdded = true;
+let clearSeats = [];
 
 btn.addEventListener("click", () => {
   const rows = Rows.value;
@@ -72,7 +74,7 @@ btn.addEventListener("click", () => {
         fontSize: 15,
         selectable: false,
         seatNumber: i * cols + j + 1,
-        fill: 'white',
+        fill: "white",
       });
 
       seat.on("mousedown", function () {
@@ -116,8 +118,28 @@ seatEditing.addEventListener("click", () => {
   canvas.renderAll();
 });
 
+clearSeatsBtn.addEventListener("click", () => {
+  while (clearSeats.length > 0) {
+    const seat = clearSeats.pop();
+    console.log(seat);
+    canvas.remove(seat);
+  }
+  canvas.renderAll();
+});
+
 function toggleSeatSelection(seat) {
-  seat.set("fill", seat.get("fill") === "blue" ? "grey" : "blue");
+  const currentFill = seat.get("fill");
+  seat.set("fill", currentFill === "blue" ? "grey" : "blue");
+
+  if (currentFill === "grey") {
+    const index = clearSeats.indexOf(seat);
+    if (index !== -1) {
+      clearSeats.splice(index, 1);
+    }
+  } else {
+    clearSeats.push(seat);
+  }
+
   canvas.renderAll();
 }
 
