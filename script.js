@@ -17,6 +17,7 @@ btn.addEventListener("click", () => {
   const cols = Cols.value;
 
   canvas.clear();
+  seatNums = [];
 
   for (let i = 0; i < rows; i++) {
     const letter = String.fromCharCode(65 + i);
@@ -72,6 +73,11 @@ function toggleSeatSelection(seat) {
 }
 
 function modifySeatNums(seatNumber, cols) {
+  if (seatNums[seatNumber - 1].text === "") addSeats(seatNumber, cols);
+  else removeSeats(seatNumber, cols);
+}
+
+function removeSeats(seatNumber, cols) {
   seatNumber = parseInt(seatNumber);
   cols = parseInt(cols);
   let start = seatNumber % cols;
@@ -79,7 +85,6 @@ function modifySeatNums(seatNumber, cols) {
   let j = seatNumber;
   let no = seatNums[seatNumber - 1].text;
   for (let i = start; i < cols; i++, j++) {
-    console.log(no);
     if (seatNums[j].text === "") continue;
     else {
       seatNums[j].text = `${no}`;
@@ -88,4 +93,23 @@ function modifySeatNums(seatNumber, cols) {
   }
 
   seatNums[seatNumber - 1].text = "";
+}
+
+function addSeats(seatNumber, cols) {
+  seatNumber = parseInt(seatNumber);
+  cols = parseInt(cols);
+  let start = seatNumber % cols;
+  if (start == 0) start = cols;
+  let no = 1;
+  let j = seatNumber - start;
+  console.log(j);
+
+  for (let i = 0; i < cols; i++, j++) {
+    if (seatNums[j].text === "" && i != start - 1) {
+      continue;
+    } else {
+      seatNums[j].text = `${no}`;
+      no++;
+    }
+  }
 }
