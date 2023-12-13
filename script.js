@@ -110,9 +110,11 @@ btn.addEventListener("click", () => {
 seatEditing.addEventListener("click", () => {
   if (groupAdded) {
     canvas.remove(group);
+    seatEditing.style.backgroundColor = 'lightGreen';
     groupAdded = false;
   } else {
     canvas.add(group);
+    seatEditing.style.backgroundColor = 'white';
     groupAdded = true;
   }
   canvas.renderAll();
