@@ -2,6 +2,8 @@ const Rows = document.querySelector(".rows");
 const Cols = document.querySelector(".columns");
 const btn = document.querySelector(".btn");
 const bName = document.querySelector(".block-name");
+const seatEditing = document.querySelector(".activate-seat-editing-btn button");
+
 
 var canvas = new fabric.Canvas("canvas", {
   top: 50,
@@ -12,6 +14,8 @@ var canvas = new fabric.Canvas("canvas", {
 
 let seatSize = 20;
 let seatNums = [];
+let grpArr = [];
+let group;
 
 btn.addEventListener("click", () => {
   const rows = Rows.value;
@@ -30,6 +34,7 @@ btn.addEventListener("click", () => {
   });
 
   canvas.add(blockHeading);
+  grpArr.push(blockHeading);
 
   for (let i = 0; i < rows; i++) {
     const letter = String.fromCharCode(65 + i);
@@ -42,6 +47,7 @@ btn.addEventListener("click", () => {
     });
 
     canvas.add(rowName);
+    grpArr.push(rowName);
 
     for (let j = 0; j < cols; j++) {
       const left = j * seatSize * 2 + seatSize;
@@ -72,6 +78,11 @@ btn.addEventListener("click", () => {
         modifySeatNums(seatNum.seatNumber, cols);
       });
 
+      seat.on("click", function () {
+        toggleSeatSelection(seat);
+        modifySeatNums(seatNum.seatNumber, cols);
+      });
+
       seatNum.on("mousedown", function () {
         toggleSeatSelection(seat);
         modifySeatNums(seatNum.seatNumber, cols);
@@ -80,9 +91,21 @@ btn.addEventListener("click", () => {
       canvas.add(seat);
       canvas.add(seatNum);
       seatNums.push(seatNum);
+      grpArr.push(seat);
+      grpArr.push(seatNum);
     }
   }
+
+  group = new fabric.Group(grpArr);
+  canvas.add(group);
+
+  canvas.renderAll();
 });
+
+seatEditing.addEventListener("click", () => {
+  canvas.remove(group);
+  canvas.renderAll();
+})
 
 function toggleSeatSelection(seat) {
   seat.set("fill", seat.get("fill") === "blue" ? "grey" : "blue");
