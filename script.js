@@ -121,7 +121,10 @@ seatEditing.addEventListener("click", () => {
 clearSeatsBtn.addEventListener("click", () => {
   while (clearSeats.length > 0) {
     const seat = clearSeats.pop();
-    console.log(seat);
+    const index = grpArr.indexOf(seat);
+    if(index !== -1){
+      grpArr.splice(index, 1);
+    }
     canvas.remove(seat);
   }
   canvas.renderAll();
@@ -173,7 +176,6 @@ function addSeats(seatNumber, cols) {
   if (start == 0) start = cols;
   let no = 1;
   let j = seatNumber - start;
-  console.log(j);
 
   for (let i = 0; i < cols; i++, j++) {
     if (seatNums[j].text === "" && i != start - 1) {
